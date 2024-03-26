@@ -34,7 +34,6 @@ export function AddToStripe({
         unit_amount: object.metadata.price * 100,
       },
     })
-    console.log(product)
     await cosmic.objects.updateOne(object.id, {
       metadata: {
         stripe_product_id: product.id,

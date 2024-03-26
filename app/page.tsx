@@ -39,10 +39,9 @@ export default async function IndexPage({
       </div>
     )
   const stripe = require("stripe")(stripe_secret_key)
-  const { data } = await stripe.products.list()
-  const product = data.filter(
-    (prod: any) => prod?.metadata?.cosmic_object_id === cosmic_object_id
-  )[0]
+  const product = await stripe.products.retrieve(
+    object.metadata.stripe_product_id
+  )
 
   async function ProductSection({ product }: { product: any }) {
     const price = await stripe.prices.retrieve(product.default_price)
@@ -91,7 +90,7 @@ export default async function IndexPage({
           />
           <h1>Stripe Products</h1>
         </div>
-        {product ? (
+        {product && product.active === true ? (
           <ProductSection product={product} />
         ) : (
           <AddToStripe object={object} searchParams={searchParams} />
