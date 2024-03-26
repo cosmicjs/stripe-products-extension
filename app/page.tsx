@@ -1,8 +1,57 @@
-import Link from "next/link"
-
-import { siteConfig } from "@/config/site"
 import { cosmicBucketConfig } from "@/lib/cosmic"
-import { buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
+const stripe = require("stripe")(process.env.STRIPE_API_KEY)
+
+function AddStripeProduct({ object }: { object?: any }) {
+  return (
+    <div>
+      <h1>Add {object.title} to Stripe</h1>
+      <Button>Add Product</Button>
+    </div>
+  )
+}
+
+async function ProductSection({ product }: { product: any }) {
+  const price = await stripe.prices.retrieve(product.default_price)
+  return (
+    <div className="space-y-4">
+      <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
+        Edit {product.name}
+      </h1>
+      <div>
+        <Label htmlFor="title">Title</Label>
+        <Input
+          id="title"
+          type="text"
+          placeholder="Title"
+          defaultValue={product.name}
+        />
+      </div>
+      <div>
+        <Label>Images</Label>
+        <p className="text-lg mb-4 text-gray-800 dark:text-dark-gray-800">
+          <img
+            src={product.images[0]}
+            className="w-[100px] h-[100px] object-cover rounded-lg"
+          />
+        </p>
+      </div>
+      <div>
+        <Label htmlFor="price">Price</Label>
+        <Input
+          id="price"
+          type="number"
+          placeholder="Price"
+          defaultValue={price.unit_amount / 100}
+        />
+      </div>
+      <Button>Edit Product</Button>
+    </div>
+  )
+}
 
 export default async function IndexPage({
   searchParams,
@@ -12,6 +61,7 @@ export default async function IndexPage({
     read_key: string
     write_key: string
     location: string
+    object_id: string
   }
 }) {
   const cosmic = cosmicBucketConfig(
@@ -19,41 +69,16 @@ export default async function IndexPage({
     searchParams.read_key,
     searchParams.write_key
   )
-  // Do something with Cosmic data. For example:
-  // const { objects: posts } = await cosmic.objects.find({
-  //   type: 'posts'
-  // })
+  const cosmic_object_id = "65dba337919fff9f84c6ede7"
+  const { data } = await stripe.products.list()
+  const product = data.filter(
+    (prod: any) => prod?.metadata?.cosmic_object_id === cosmic_object_id
+  )[0]
   // See the Cosmic docs for more info https://www.cosmicjs.com/docs
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10 p-4">
       <div className="flex max-w-[980px] flex-col items-start gap-2">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-          Beautifully designed template <br className="hidden sm:inline" />
-          built with Next.js, Shadcn UI, Tailwind CSS, and Cosmic.
-        </h1>
-        <p className="text-lg text-gray-800 dark:text-dark-gray-800">
-          Use it as a starter for your Cosmic websites and apps. Extension
-          ready. See <code>app/page.tsx</code> to learn how to connect to
-          Cosmic.
-        </p>
-      </div>
-      <div className="flex gap-4">
-        <Link
-          href={siteConfig.links.docs}
-          target="_blank"
-          rel="noreferrer"
-          className={buttonVariants()}
-        >
-          Documentation
-        </Link>
-        <Link
-          target="_blank"
-          rel="noreferrer"
-          href={siteConfig.links.login}
-          className={buttonVariants({ variant: "outline" })}
-        >
-          Login
-        </Link>
+        {product ? <ProductSection product={product} /> : <AddStripeProduct />}
       </div>
     </section>
   )
