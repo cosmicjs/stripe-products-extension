@@ -3,6 +3,7 @@ import { cosmicBucketConfig } from "@/lib/cosmic"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { AddToStripe } from "@/components/AddToStripe"
 
 export default async function IndexPage({
   searchParams,
@@ -42,15 +43,6 @@ export default async function IndexPage({
   const product = data.filter(
     (prod: any) => prod?.metadata?.cosmic_object_id === cosmic_object_id
   )[0]
-
-  function AddStripeProduct({ object }: { object?: any }) {
-    return (
-      <div>
-        <h1 className="mb-6">Add {object.title} to Stripe</h1>
-        <Button>Add Product</Button>
-      </div>
-    )
-  }
 
   async function ProductSection({ product }: { product: any }) {
     const price = await stripe.prices.retrieve(product.default_price)
@@ -92,12 +84,12 @@ export default async function IndexPage({
     )
   }
   return (
-    <section className="px-4">
+    <section className="max-w-[600px] px-4">
       <div className="mt-6 w-full">
         {product ? (
           <ProductSection product={product} />
         ) : (
-          <AddStripeProduct object={object} />
+          <AddToStripe object={object} stripe_secret_key={stripe_secret_key} />
         )}
       </div>
     </section>
