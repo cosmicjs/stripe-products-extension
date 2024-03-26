@@ -48,9 +48,6 @@ export default async function IndexPage({
     const price = await stripe.prices.retrieve(product.default_price)
     return (
       <div className="space-y-4">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-          Edit {product.name}
-        </h1>
         <div>
           <Label htmlFor="title">Title</Label>
           <Input
