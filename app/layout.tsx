@@ -37,15 +37,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <head />
         <body
           className={cn(
-            "mx-auto flex min-h-screen w-full justify-center bg-light-background font-sans antialiased dark:bg-dark-background",
+            "w-full justify-center bg-light-background font-sans antialiased dark:bg-dark-background",
             fontSans.variable
           )}
         >
           <Suspense>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              <div className="relative flex min-h-screen flex-col">
-                <div className="flex-1">{children}</div>
-              </div>
+              <div>{children}</div>
               <TailwindIndicator />
             </ThemeProvider>
           </Suspense>
