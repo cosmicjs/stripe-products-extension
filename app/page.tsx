@@ -97,7 +97,7 @@ export default async function IndexPage({
         {product ? (
           <ProductSection product={product} />
         ) : (
-          <AddToStripe object={object} stripe_secret_key={stripe_secret_key} />
+          <AddToStripe object={object} searchParams={searchParams} />
         )}
       </div>
     </section>

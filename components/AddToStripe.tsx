@@ -3,16 +3,22 @@
 import { useState } from "react"
 import { CheckCircleIcon, Loader2 } from "lucide-react"
 
+import { cosmicBucketConfig } from "@/lib/cosmic"
 import { Button } from "@/components/ui/button"
 
 export function AddToStripe({
   object,
-  stripe_secret_key,
+  searchParams,
 }: {
   object?: any
-  stripe_secret_key: string
+  searchParams: any
 }) {
-  const stripe = require("stripe")(stripe_secret_key)
+  const cosmic = cosmicBucketConfig(
+    searchParams.bucket_slug,
+    searchParams.read_key,
+    searchParams.write_key
+  )
+  const stripe = require("stripe")(searchParams.stripe_secret_key)
   const [submitting, setSubmitting] = useState(false)
   const [added, setAdded] = useState(false)
   async function handleAddToStripe() {
@@ -26,6 +32,12 @@ export function AddToStripe({
       default_price_data: {
         currency: "USD",
         unit_amount: object.metadata.price * 100,
+      },
+    })
+    console.log(product)
+    await cosmic.objects.updateOne(object.id, {
+      metadata: {
+        stripe_product_id: product.id,
       },
     })
     setSubmitting(false)
