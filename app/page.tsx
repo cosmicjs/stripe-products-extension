@@ -39,9 +39,9 @@ export default async function IndexPage({
       </div>
     )
   const stripe = require("stripe")(stripe_secret_key)
-  const product = await stripe.products.retrieve(
-    object.metadata.stripe_product_id
-  )
+  let product
+  if (object.metadata.stripe_product_id)
+    product = await stripe.products.retrieve(object.metadata.stripe_product_id)
 
   async function ProductSection({ product }: { product: any }) {
     const price = await stripe.prices.retrieve(product.default_price)
