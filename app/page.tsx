@@ -22,11 +22,22 @@ export default async function IndexPage({
     searchParams.write_key
   )
   const cosmic_object_id = searchParams.object_id
+  if (!cosmic_object_id)
+    return <div className="mt-6">View this from the edit Object page.</div>
+
   const { object } = await cosmic.objects.findOne({
     id: cosmic_object_id,
   })
   // Init Stripe
-  const stripe = require("stripe")(searchParams.stripe_secret_key)
+  const stripe_secret_key = searchParams.stripe_secret_key
+  if (!stripe_secret_key)
+    return (
+      <div className="mt-6">
+        Go to the settings for this extension and add the `stripe_secret_key` to
+        Query parameters to connect to Stripe.
+      </div>
+    )
+  const stripe = require("stripe")(stripe_secret_key)
   const { data } = await stripe.products.list()
   const product = data.filter(
     (prod: any) => prod?.metadata?.cosmic_object_id === cosmic_object_id
