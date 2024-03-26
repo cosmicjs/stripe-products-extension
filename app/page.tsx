@@ -86,6 +86,14 @@ export default async function IndexPage({
   return (
     <section className="max-w-[600px] px-4">
       <div className="mt-6 w-full">
+        <div className="mb-6 flex items-center">
+          <img
+            alt="Stripe icon"
+            src="https://imgix.cosmicjs.com/13f2b2e0-eaef-11ee-b074-b5c8fe3ef189-Stripe.svg?w=40&h=40"
+            className="mr-4 size-10 rounded"
+          />
+          <h1>Stripe Products</h1>
+        </div>
         {product ? (
           <ProductSection product={product} />
         ) : (
