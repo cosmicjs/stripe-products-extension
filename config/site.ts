@@ -1,4 +1,4 @@
-export type SiteConfig = typeof siteConfig
+export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
   name: "Next.js",
@@ -16,4 +16,4 @@ export const siteConfig = {
     docs: "https://www.cosmicjs.com/docs",
     login: "https://app.cosmicjs.com/login",
   },
-}
+};

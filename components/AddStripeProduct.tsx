@@ -1,28 +1,28 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { CheckCircleIcon, Loader2 } from "lucide-react"
+import { useState } from "react";
+import { CheckCircleIcon, Loader2 } from "lucide-react";
 
-import { cosmicBucketConfig } from "@/lib/cosmic"
-import { Button } from "@/components/ui/button"
+import { cosmicBucketConfig } from "@/lib/cosmic";
+import { Button } from "@/components/ui/button";
 
-export function AddToStripe({
+export function AddStripeProduct({
   object,
   searchParams,
 }: {
-  object?: any
-  searchParams: any
+  object?: any;
+  searchParams: any;
 }) {
   const cosmic = cosmicBucketConfig(
     searchParams.bucket_slug,
     searchParams.read_key,
     searchParams.write_key
-  )
-  const stripe = require("stripe")(searchParams.stripe_secret_key)
-  const [submitting, setSubmitting] = useState(false)
-  const [added, setAdded] = useState(false)
+  );
+  const stripe = require("stripe")(searchParams.stripe_secret_key);
+  const [submitting, setSubmitting] = useState(false);
+  const [added, setAdded] = useState(false);
   async function handleAddToStripe() {
-    setSubmitting(true)
+    setSubmitting(true);
     const product = await stripe.products.create({
       name: object.title,
       metadata: {
@@ -33,25 +33,25 @@ export function AddToStripe({
         currency: "USD",
         unit_amount: object.metadata.price * 100,
       },
-    })
+    });
     await cosmic.objects.updateOne(object.id, {
       metadata: {
         stripe_product_id: product.id,
       },
-    })
-    setSubmitting(false)
-    setAdded(true)
+    });
+    setSubmitting(false);
+    setAdded(true);
   }
   if (added) {
     setTimeout(() => {
-      location.reload()
-    }, 2000)
+      location.reload();
+    }, 2000);
     return (
       <div className="flex">
         <CheckCircleIcon className="mr-2 mt-1 size-4 text-green-400" /> Success!
         Product added.
       </div>
-    )
+    );
   }
   return (
     <div>
@@ -66,5 +66,5 @@ export function AddToStripe({
         )}
       </Button>
     </div>
-  )
+  );
 }

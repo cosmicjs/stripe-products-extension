@@ -1,4 +1,4 @@
-import { createBucketClient } from "@cosmicjs/sdk"
+import { createBucketClient } from "@cosmicjs/sdk";
 
 export const cosmicBucketConfig = (
   bucketSlug: string,
@@ -9,4 +9,4 @@ export const cosmicBucketConfig = (
     bucketSlug,
     readKey,
     writeKey,
-  })
+  });

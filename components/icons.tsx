@@ -3,9 +3,9 @@ import {
   Moon,
   SunMedium,
   type Icon as LucideIcon,
-} from "lucide-react"
+} from "lucide-react";
 
-export type Icon = LucideIcon
+export type Icon = LucideIcon;
 
 export const Icons = {
   sun: SunMedium,
@@ -96,4 +96,4 @@ export const Icons = {
       <path d="M127.75 23.7834C131.937 23.7834 135 21.4228 135 17.9381V17.629H131.993V17.8257C131.993 19.9896 130.419 21.0575 127.693 21.0575C124.546 21.0575 123.141 19.54 123.141 16.533C123.141 13.4699 124.546 11.9804 127.693 11.9804C130.419 11.9804 131.993 13.0483 131.993 15.2122V15.3808H135V15.0998C135 11.6151 131.937 9.25452 127.75 9.25452C123.141 9.25452 120.134 12.1772 120.134 16.533C120.134 20.8327 123.141 23.7834 127.75 23.7834Z"></path>
     </svg>
   ),
-}
+};
