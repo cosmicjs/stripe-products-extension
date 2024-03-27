@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { cosmicBucketConfig } from "@/lib/cosmic";
 import { AddStripeProduct } from "@/components/AddStripeProduct";
-import { EditStripeProduct } from "@/components/EditStripeProduct";
+import { DisplayStripeProduct } from "@/components/DisplayStripeProduct";
 
 export default async function IndexPage({
   searchParams,
@@ -55,7 +55,7 @@ export default async function IndexPage({
           <h1>Stripe Products</h1>
         </div>
         {product && product.active === true ? (
-          <EditStripeProduct product={product} price={price} />
+          <DisplayStripeProduct product_id={product.id} />
         ) : (
           <AddStripeProduct object={object} searchParams={searchParams} />
         )}
