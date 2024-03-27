@@ -10,8 +10,8 @@ export async function DisplayStripeProduct({
 }) {
   return (
     <div className="space-y-4">
-      <div className="flex border border-green-500 p-4 rounded-lg">
-        <CheckCircleIcon className="size-4 text-green-500 mr-2 mt-1" /> Product
+      <div className="flex rounded-lg border border-green-500 p-4">
+        <CheckCircleIcon className="mr-2 mt-1 size-4 text-green-500" /> Product
         added to Stripe
       </div>
       <Link
