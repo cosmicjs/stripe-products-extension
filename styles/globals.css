@@ -10,4 +10,14 @@
     @apply bg-light-background text-gray-900 dark:bg-dark-background dark:text-dark-gray-900;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+  ol {
+    list-style: decimal;
+    margin: 0 40px;
+  }
+  ol li {
+    margin-bottom: 10px 
+   }
+}
+.dark .custom-zoom [data-rmiz-modal-overlay='visible'] {
+  background-color: black;
 }

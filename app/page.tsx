@@ -2,6 +2,7 @@
 import { cosmicBucketConfig } from "@/lib/cosmic";
 import { AddStripeProduct } from "@/components/AddStripeProduct";
 import { DisplayStripeProduct } from "@/components/DisplayStripeProduct";
+import { InstallationSteps } from "@/app/InstallationSteps";
 
 export default async function IndexPage({
   searchParams,
@@ -21,8 +22,8 @@ export default async function IndexPage({
     searchParams.write_key
   );
   const cosmic_object_id = searchParams.object_id;
-  if (!cosmic_object_id)
-    return <div className="mt-6">View this from the edit Object page.</div>;
+  // If viewing from main extension page
+  if (!cosmic_object_id) return <InstallationSteps />;
 
   const { object } = await cosmic.objects.findOne({
     id: cosmic_object_id,
