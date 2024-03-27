@@ -28,7 +28,7 @@ export function AddStripeProduct({
       metadata: {
         cosmic_object_id: object.id,
       },
-      images: [object.metadata.gallery[0].image.imgix_url],
+      images: [object.metadata.image.imgix_url],
       default_price_data: {
         currency: "USD",
         unit_amount: object.metadata.price * 100,
