@@ -76,7 +76,7 @@ export default async function IndexPage({
     price = await stripe.prices.retrieve(product.default_price);
   }
   return (
-    <section className="max-w-[600px] px-4">
+    <section className="px-4">
       <div className="mt-6 w-full">
         <div className="mb-6 flex items-center">
           <img
