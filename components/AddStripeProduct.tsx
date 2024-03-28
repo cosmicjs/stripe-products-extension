@@ -43,7 +43,9 @@ export function AddStripeProduct({
       metadata: {
         cosmic_object_id: object.id,
       },
-      images: [object.metadata.image.imgix_url],
+      images: [
+        `${object.metadata.image.imgix_url}?w=600&auto=format,compression`,
+      ],
       default_price_data,
     });
     await cosmic.objects.updateOne(object.id, {
