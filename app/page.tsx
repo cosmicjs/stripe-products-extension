@@ -1,5 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @next/next/no-img-element */
+
+import { AlertCircle } from "lucide-react";
+
 import { cosmicBucketConfig } from "@/lib/cosmic";
 import { AddStripeProduct } from "@/components/AddStripeProduct";
 import { DisplayStripeProduct } from "@/components/DisplayStripeProduct";
@@ -116,6 +119,22 @@ export default async function IndexPage({
           />
           <h1>Stripe Products</h1>
         </div>
+        {!searchParams.bucket_slug && (
+          <div className="m-auto mb-8 flex max-w-[800px] rounded-xl border border-orange-400 p-4">
+            <AlertCircle className="mr-4 size-6 text-orange-400" />
+            <div>
+              Note: To use this extension, log in to your{" "}
+              <a
+                href="https://app.cosmicjs.com/login"
+                className="text-cosmic-blue"
+              >
+                Cosmic dashboard
+              </a>{" "}
+              and go to Project / Extenions and find the Stripe Products
+              extension.
+            </div>
+          </div>
+        )}
         {!cosmic_object_id ? <InstallationSteps /> : getContent(searchParams)}
       </div>
     </section>
