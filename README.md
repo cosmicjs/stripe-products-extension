@@ -1,25 +1,29 @@
-# Cosmic Next Template
+<img src="https://imgix.cosmicjs.com/13f2b2e0-eaef-11ee-b074-b5c8fe3ef189-Stripe.svg" width="500" height="500" />
 
-Beautifully designed template built with Next.js, Shadcn UI, Tailwind CSS. Use it as a starter for your Cosmic websites and apps. Use it as a [Cosmic extension](https://www.cosmicjs.com/docs/dashboard/buckets#extensions) starter.
+# Stripe Products Extension
+
+Manage your Stripe products from the convenience of your Cosmic dashboard. Seamlessly enable ecommerce in your websites and apps.
 
 ## Usage
 
+1. Log in to your [Cosmic dashboard](https://app.cosmicjs.com/login)
+2. Go to Project / Extensions and find the Stripe Products extension
+3. Install and configure
+
+## Contributing
+Contributions welcome!
 ```bash
-git clone https://github.com/cosmicjs/cosmic-next-template
-cd cosmic-next-template
+git clone https://github.com/cosmicjs/stripe-products-extension
+cd stripe-products-extension
 bun
 bun dev
 ```
 
 ## Features
 
-- Next.js 14 with App Directory
-- Radix UI Primitives
-- Tailwind CSS
-- Icons from [Lucide](https://lucide.dev)
-- Dark mode with `next-themes`
-- Tailwind CSS class sorting, merging and linting.
+- Install and configure to connect to your Stripe account in seconds
+- Add products to your Stripe account from the convenience of your Cosmic dashboard
 
 ## License
 
-Licensed under the [MIT license](https://github.com/cosmicjs/cosmic-next-template/blob/main/LICENSE.md).
+Licensed under the [MIT license](https://github.com/cosmicjs/stripe-products-extension/blob/main/LICENSE.md).
