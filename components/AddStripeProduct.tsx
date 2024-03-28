@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircleIcon, Loader2 } from "lucide-react";
+import { CheckIcon, Loader2 } from "lucide-react";
 
 import { cosmicBucketConfig } from "@/lib/cosmic";
 import { Button } from "@/components/ui/button";
@@ -57,13 +57,10 @@ export function AddStripeProduct({
     setAdded(true);
   }
   if (added) {
-    setTimeout(() => {
-      location.reload();
-    }, 2000);
     return (
       <div className="flex">
-        <CheckCircleIcon className="mr-2 mt-1 size-4 text-green-400" /> Success!
-        Product added.
+        <CheckIcon className="mr-2 mt-1 size-4 text-green-400" /> Success!
+        Product connected to Stripe. Refresh this page to load the Stripe data.
       </div>
     );
   }
