@@ -63,6 +63,7 @@ async function getContent(searchParams: searchParamsType) {
           Stripe. Go to Object type / Settings and make sure the required fields
           are available:
           <br />
+          <br />- <code>image</code> (Image)
           <br />- <code>price</code> (Number)
           <br />- <code>stripe_product_id</code> (Text)
           <br />-<code>recurring</code> (Parent)
