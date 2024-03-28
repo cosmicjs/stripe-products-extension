@@ -19,7 +19,7 @@ export async function DisplayStripeProduct({
         href={`https://dashboard.stripe.com/products/${product_id}`}
         target="_blank"
       >
-        Edit in Stripe <ExternalLinkIcon className="ml-2 size-4" />
+        View in Stripe <ExternalLinkIcon className="ml-2 size-4" />
       </Link>
     </div>
   );
