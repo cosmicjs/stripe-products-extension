@@ -83,10 +83,12 @@ async function getContent(searchParams: searchParamsType) {
     // If valid product Object and product active
     let product;
     if (object.metadata.stripe_product_id) {
-      const stripe = require("stripe")(stripe_secret_key);
-      product = await stripe.products.retrieve(
-        object.metadata.stripe_product_id
-      );
+      try {
+        const stripe = require("stripe")(stripe_secret_key);
+        product = await stripe.products.retrieve(
+          object.metadata.stripe_product_id
+        );
+      } catch {}
     }
     if (product && product.active === true) {
       return (
