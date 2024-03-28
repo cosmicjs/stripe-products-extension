@@ -22,7 +22,7 @@ type searchParamsType = {
   stripe_secret_key: string;
 };
 
-function isValidProduct(objectMetadata: ObjectMetadataType) {
+function isValidObject(objectMetadata: ObjectMetadataType) {
   if (!objectMetadata.price) return false;
   if (
     objectMetadata.recurring?.is_recurring &&
@@ -55,7 +55,7 @@ async function getContent(searchParams: searchParamsType) {
       id: cosmic_object_id,
     });
     // Check that Object has correct metafields
-    if (!isValidProduct(object.metadata))
+    if (!isValidObject(object.metadata))
       return (
         <div className="my-6">
           This Object is missing the required metafields to create a product in
