@@ -38,7 +38,6 @@ async function getContent(searchParams: searchParamsType) {
     searchParams.read_key,
     searchParams.write_key
   );
-  let content;
   // Init Stripe
   const stripe_secret_key = searchParams.stripe_secret_key;
   const cosmic_object_id = searchParams.object_id;
@@ -79,13 +78,13 @@ async function getContent(searchParams: searchParamsType) {
       );
     // If valid product Object and product active
     let product;
-    const stripe = require("stripe")(stripe_secret_key);
     if (object.metadata.stripe_product_id) {
+      const stripe = require("stripe")(stripe_secret_key);
       product = await stripe.products.retrieve(
         object.metadata.stripe_product_id
       );
     }
-    if (!content && product && product.active === true) {
+    if (product && product.active === true) {
       return (
         <DisplayStripeProduct
           product_id={product.id}
