@@ -130,7 +130,7 @@ export default async function IndexPage({
               >
                 Cosmic dashboard
               </a>{" "}
-              and go to Project / Extenions and find the Stripe Products
+              and go to Project / Extensions and find the Stripe Products
               extension.
             </div>
           </div>
