@@ -49,42 +49,45 @@ export default async function IndexPage({
   // Init Stripe
   const stripe_secret_key = searchParams.stripe_secret_key;
   let content;
-  let product;
   // Check for stripe
-  if (!stripe_secret_key)
+  if (!stripe_secret_key) {
     content = (
-      <div className="m-6">
+      <div className="my-6">
         Go to the settings for this extension and add the{" "}
         <code>stripe_secret_key</code> to Query parameters to connect to Stripe.
       </div>
     );
-  else {
+  } else {
     const stripe = require("stripe")(stripe_secret_key);
-    product = await stripe.products.retrieve(object.metadata.stripe_product_id);
+    const product = await stripe.products.retrieve(
+      object.metadata.stripe_product_id
+    );
+    // Check that Object has correct metafields
+    if (!isValidProduct(object.metadata))
+      content = (
+        <div className="my-6">
+          This Object is missing the required metafields to create a product in
+          Stripe. Go to Object type / Settings and make sure the required fields
+          are available: - <code>price</code> (Number) -{" "}
+          <code>stripe_product_id</code> (Text) -<code>recurring</code> (Parent)
+          - <code>is_recurring</code> (Switch) - <code>interval</code> (Select
+          dropdown "month" or "year"). Go to the Stripe products extension
+          installation guide for more information.
+        </div>
+      );
+    // If valid product Object and product active
+    if (!content && product && product.active === true)
+      content = (
+        <DisplayStripeProduct
+          product_id={product.id}
+          is_live={product.livemode}
+        />
+      );
+    else
+      content = (
+        <AddStripeProduct object={object} searchParams={searchParams} />
+      );
   }
-  // Check that Object has correct metafields
-  if (!content && !isValidProduct(object.metadata))
-    content = (
-      <div className="m-6">
-        This Object is missing the required metafields to create a product in
-        Stripe. Go to Object type / Settings and make sure the required fields
-        are available: - <code>price</code> (Number) -{" "}
-        <code>stripe_product_id</code> (Text) -<code>recurring</code> (Parent) -{" "}
-        <code>is_recurring</code> (Switch) - <code>interval</code> (Select
-        dropdown "month" or "year"). Go to the Stripe products extension
-        installation guide for more information.
-      </div>
-    );
-  if (!content && product && product.active === true)
-    content = (
-      <DisplayStripeProduct
-        product_id={product.id}
-        is_live={product.livemode}
-      />
-    );
-  else
-    content = <AddStripeProduct object={object} searchParams={searchParams} />;
-
   return (
     <section className="px-4">
       <div className="mt-6 w-full">
