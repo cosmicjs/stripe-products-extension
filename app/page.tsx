@@ -78,10 +78,13 @@ async function getContent(searchParams: searchParamsType) {
         </div>
       );
     // If valid product Object and product active
+    let product;
     const stripe = require("stripe")(stripe_secret_key);
-    const product = await stripe.products.retrieve(
-      object.metadata.stripe_product_id
-    );
+    if (object.metadata.stripe_product_id) {
+      product = await stripe.products.retrieve(
+        object.metadata.stripe_product_id
+      );
+    }
     if (!content && product && product.active === true) {
       return (
         <DisplayStripeProduct
