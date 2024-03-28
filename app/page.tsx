@@ -66,7 +66,7 @@ async function getContent(searchParams: searchParamsType) {
           <br />- <code>image</code> (Image)
           <br />- <code>price</code> (Number)
           <br />- <code>stripe_product_id</code> (Text)
-          <br />-<code>recurring</code> (Parent)
+          <br />- <code>recurring</code> (Parent)
           <br />
           -- <code>is_recurring</code> (Switch)
           <br />
