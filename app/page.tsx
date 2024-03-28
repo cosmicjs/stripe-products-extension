@@ -22,22 +22,28 @@ type searchParamsType = {
   stripe_secret_key: string;
 };
 
+function isValidProduct(objectMetadata: ObjectMetadataType) {
+  if (!objectMetadata.price) return false;
+  if (
+    objectMetadata.recurring?.is_recurring &&
+    !objectMetadata.recurring.interval
+  )
+    return false;
+  return true;
+}
+
 async function getContent(searchParams: searchParamsType) {
   const cosmic = cosmicBucketConfig(
     searchParams.bucket_slug,
     searchParams.read_key,
     searchParams.write_key
   );
-  const cosmic_object_id = searchParams.object_id;
   let content;
-  // If viewing from main extension page
-  const { object } = await cosmic.objects.findOne({
-    id: cosmic_object_id,
-  });
   // Init Stripe
   const stripe_secret_key = searchParams.stripe_secret_key;
+  const cosmic_object_id = searchParams.object_id;
   // Check for stripe
-  if (!content && !stripe_secret_key) {
+  if (!stripe_secret_key) {
     return (
       <div className="my-6">
         Go to the settings for this extension and add the{" "}
@@ -45,6 +51,10 @@ async function getContent(searchParams: searchParamsType) {
       </div>
     );
   } else {
+    // If viewing from main extension page
+    const { object } = await cosmic.objects.findOne({
+      id: cosmic_object_id,
+    });
     const stripe = require("stripe")(stripe_secret_key);
     const product = await stripe.products.retrieve(
       object.metadata.stripe_product_id
@@ -76,16 +86,6 @@ async function getContent(searchParams: searchParamsType) {
   }
 }
 
-function isValidProduct(objectMetadata: ObjectMetadataType) {
-  if (!objectMetadata.price) return false;
-  if (
-    objectMetadata.recurring?.is_recurring &&
-    !objectMetadata.recurring.interval
-  )
-    return false;
-  return true;
-}
-
 export default async function IndexPage({
   searchParams,
 }: {
@@ -103,8 +103,7 @@ export default async function IndexPage({
           />
           <h1>Stripe Products</h1>
         </div>
-        {!cosmic_object_id && <InstallationSteps />}
-        {getContent(searchParams)}
+        {!cosmic_object_id ? <InstallationSteps /> : getContent(searchParams)}
       </div>
     </section>
   );
