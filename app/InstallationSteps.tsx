@@ -17,7 +17,7 @@ export async function InstallationSteps() {
     .status("any")
     .depth(1);
   return (
-    <div className="m-auto max-w-[800px] py-10">
+    <div className="m-auto max-w-[800px] pb-10">
       <h2 className="mb-6 text-3xl">Installation Guide</h2>
       <MarkdownClient>{object.metadata.installation_guide}</MarkdownClient>
     </div>

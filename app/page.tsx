@@ -13,45 +13,32 @@ type ObjectMetadataType = {
   };
 };
 
-function isValidProduct(objectMetadata: ObjectMetadataType) {
-  if (!objectMetadata.price) return false;
-  if (
-    objectMetadata.recurring?.is_recurring &&
-    !objectMetadata.recurring.interval
-  )
-    return false;
-  return true;
-}
-export default async function IndexPage({
-  searchParams,
-}: {
-  searchParams: {
-    bucket_slug: string;
-    read_key: string;
-    write_key: string;
-    location: string;
-    object_id: string;
-    stripe_secret_key: string;
-  };
-}) {
+type searchParamsType = {
+  bucket_slug: string;
+  read_key: string;
+  write_key: string;
+  location: string;
+  object_id: string;
+  stripe_secret_key: string;
+};
+
+async function getContent(searchParams: searchParamsType) {
   const cosmic = cosmicBucketConfig(
     searchParams.bucket_slug,
     searchParams.read_key,
     searchParams.write_key
   );
   const cosmic_object_id = searchParams.object_id;
+  let content;
   // If viewing from main extension page
-  if (!cosmic_object_id) return <InstallationSteps />;
-
   const { object } = await cosmic.objects.findOne({
     id: cosmic_object_id,
   });
   // Init Stripe
   const stripe_secret_key = searchParams.stripe_secret_key;
-  let content;
   // Check for stripe
-  if (!stripe_secret_key) {
-    content = (
+  if (!content && !stripe_secret_key) {
+    return (
       <div className="my-6">
         Go to the settings for this extension and add the{" "}
         <code>stripe_secret_key</code> to Query parameters to connect to Stripe.
@@ -64,7 +51,7 @@ export default async function IndexPage({
     );
     // Check that Object has correct metafields
     if (!isValidProduct(object.metadata))
-      content = (
+      return (
         <div className="my-6">
           This Object is missing the required metafields to create a product in
           Stripe. Go to Object type / Settings and make sure the required fields
@@ -76,18 +63,35 @@ export default async function IndexPage({
         </div>
       );
     // If valid product Object and product active
-    if (!content && product && product.active === true)
-      content = (
+    if (!content && product && product.active === true) {
+      return (
         <DisplayStripeProduct
           product_id={product.id}
           is_live={product.livemode}
         />
       );
-    else
-      content = (
-        <AddStripeProduct object={object} searchParams={searchParams} />
-      );
+    } else {
+      return <AddStripeProduct object={object} searchParams={searchParams} />;
+    }
   }
+}
+
+function isValidProduct(objectMetadata: ObjectMetadataType) {
+  if (!objectMetadata.price) return false;
+  if (
+    objectMetadata.recurring?.is_recurring &&
+    !objectMetadata.recurring.interval
+  )
+    return false;
+  return true;
+}
+
+export default async function IndexPage({
+  searchParams,
+}: {
+  searchParams: searchParamsType;
+}) {
+  const cosmic_object_id = searchParams.object_id;
   return (
     <section className="px-4">
       <div className="mt-6 w-full">
@@ -99,7 +103,8 @@ export default async function IndexPage({
           />
           <h1>Stripe Products</h1>
         </div>
-        {content}
+        {!cosmic_object_id && <InstallationSteps />}
+        {getContent(searchParams)}
       </div>
     </section>
   );
