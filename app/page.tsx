@@ -61,11 +61,19 @@ async function getContent(searchParams: searchParamsType) {
         <div className="my-6">
           This Object is missing the required metafields to create a product in
           Stripe. Go to Object type / Settings and make sure the required fields
-          are available: - <code>price</code> (Number) -{" "}
-          <code>stripe_product_id</code> (Text) -<code>recurring</code> (Parent)
-          - <code>is_recurring</code> (Switch) - <code>interval</code> (Select
-          dropdown "month" or "year"). Go to the Stripe products extension
-          installation guide for more information.
+          are available:
+          <br />
+          <br />- <code>price</code> (Number)
+          <br />- <code>stripe_product_id</code> (Text)
+          <br />-<code>recurring</code> (Parent)
+          <br />
+          -- <code>is_recurring</code> (Switch)
+          <br />
+          -- <code>interval</code> (Select dropdown "month" or "year")
+          <br />
+          <br />
+          Go to the Stripe products extension page in this dashboard for more
+          information.
         </div>
       );
     // If valid product Object and product active
