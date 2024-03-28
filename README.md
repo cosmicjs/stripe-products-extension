@@ -4,7 +4,7 @@ Manage your Stripe products from the convenience of your Cosmic dashboard. Seaml
 
 ## Usage
 
-1. Log in to your Cosmic dasboard
+1. Log in to your [Cosmic dashboard](https://app.cosmicjs.com/login)
 2. Go to Project / Extensions and find the Stripe Products extension
 3. Install and configure
 
