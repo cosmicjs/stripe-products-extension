@@ -55,10 +55,6 @@ async function getContent(searchParams: searchParamsType) {
     const { object } = await cosmic.objects.findOne({
       id: cosmic_object_id,
     });
-    const stripe = require("stripe")(stripe_secret_key);
-    const product = await stripe.products.retrieve(
-      object.metadata.stripe_product_id
-    );
     // Check that Object has correct metafields
     if (!isValidProduct(object.metadata))
       return (
@@ -73,6 +69,10 @@ async function getContent(searchParams: searchParamsType) {
         </div>
       );
     // If valid product Object and product active
+    const stripe = require("stripe")(stripe_secret_key);
+    const product = await stripe.products.retrieve(
+      object.metadata.stripe_product_id
+    );
     if (!content && product && product.active === true) {
       return (
         <DisplayStripeProduct
