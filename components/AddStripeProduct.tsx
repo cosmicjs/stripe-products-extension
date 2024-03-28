@@ -6,6 +6,12 @@ import { CheckCircleIcon, Loader2 } from "lucide-react";
 import { cosmicBucketConfig } from "@/lib/cosmic";
 import { Button } from "@/components/ui/button";
 
+type PriceType = {
+  currency: string;
+  unit_amount: number;
+  recurring?: { interval: string };
+};
+
 export function AddStripeProduct({
   object,
   searchParams,
@@ -23,16 +29,22 @@ export function AddStripeProduct({
   const [added, setAdded] = useState(false);
   async function handleAddToStripe() {
     setSubmitting(true);
+    let default_price_data: PriceType = {
+      currency: "USD",
+      unit_amount: object.metadata.price * 100,
+    };
+    // If recurring add interval
+    if (object.metadata.recurring.is_recurring)
+      default_price_data.recurring = {
+        interval: object.metadata.recurring.interval.key,
+      };
     const product = await stripe.products.create({
       name: object.title,
       metadata: {
         cosmic_object_id: object.id,
       },
       images: [object.metadata.image.imgix_url],
-      default_price_data: {
-        currency: "USD",
-        unit_amount: object.metadata.price * 100,
-      },
+      default_price_data,
     });
     await cosmic.objects.updateOne(object.id, {
       metadata: {
