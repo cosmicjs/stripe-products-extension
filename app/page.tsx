@@ -24,6 +24,7 @@ type searchParamsType = {
 
 function isValidObject(objectMetadata: ObjectMetadataType) {
   if (!objectMetadata.price) return false;
+  if (!objectMetadata.recurring) return false;
   if (
     objectMetadata.recurring?.is_recurring &&
     !objectMetadata.recurring.interval
@@ -55,6 +56,7 @@ async function getContent(searchParams: searchParamsType) {
       id: cosmic_object_id,
     });
     // Check that Object has correct metafields
+    console.log(object.metadata);
     if (!isValidObject(object.metadata))
       return (
         <div className="my-6">
