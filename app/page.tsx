@@ -48,17 +48,23 @@ export default async function IndexPage({
   });
   // Init Stripe
   const stripe_secret_key = searchParams.stripe_secret_key;
+  let content;
+  let product;
+  // Check for stripe
   if (!stripe_secret_key)
-    return (
+    content = (
       <div className="m-6">
         Go to the settings for this extension and add the{" "}
         <code>stripe_secret_key</code> to Query parameters to connect to Stripe.
       </div>
     );
-  const stripe = require("stripe")(stripe_secret_key);
+  else {
+    const stripe = require("stripe")(stripe_secret_key);
+    product = await stripe.products.retrieve(object.metadata.stripe_product_id);
+  }
   // Check that Object has correct metafields
-  if (!isValidProduct(object.metadata))
-    return (
+  if (!content && !isValidProduct(object.metadata))
+    content = (
       <div className="m-6">
         This Object is missing the required metafields to create a product in
         Stripe. Go to Object type / Settings and make sure the required fields
@@ -69,12 +75,16 @@ export default async function IndexPage({
         installation guide for more information.
       </div>
     );
-  let product;
-  let price;
-  if (object.metadata.stripe_product_id) {
-    product = await stripe.products.retrieve(object.metadata.stripe_product_id);
-    price = await stripe.prices.retrieve(product.default_price);
-  }
+  if (!content && product && product.active === true)
+    content = (
+      <DisplayStripeProduct
+        product_id={product.id}
+        is_live={product.livemode}
+      />
+    );
+  else
+    content = <AddStripeProduct object={object} searchParams={searchParams} />;
+
   return (
     <section className="px-4">
       <div className="mt-6 w-full">
@@ -86,14 +96,7 @@ export default async function IndexPage({
           />
           <h1>Stripe Products</h1>
         </div>
-        {product && product.active === true ? (
-          <DisplayStripeProduct
-            product_id={product.id}
-            is_live={product.livemode}
-          />
-        ) : (
-          <AddStripeProduct object={object} searchParams={searchParams} />
-        )}
+        {content}
       </div>
     </section>
   );
