@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CheckCircleIcon, ExternalLinkIcon } from "lucide-react";
+import { CheckIcon, ExternalLinkIcon } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
 
@@ -11,8 +11,8 @@ export async function DisplayStripeProduct({
   return (
     <div className="space-y-4">
       <div className="flex rounded-lg border border-green-500 p-4">
-        <CheckCircleIcon className="mr-2 mt-1 size-4 text-green-500" /> Product
-        added to Stripe
+        <CheckIcon className="mr-2 mt-1 size-4 text-green-500" /> Connected to
+        Stripe.
       </div>
       <Link
         className={buttonVariants()}

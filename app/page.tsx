@@ -32,9 +32,9 @@ export default async function IndexPage({
   const stripe_secret_key = searchParams.stripe_secret_key;
   if (!stripe_secret_key)
     return (
-      <div className="mt-6">
-        Go to the settings for this extension and add the `stripe_secret_key` to
-        Query parameters to connect to Stripe.
+      <div className="m-6">
+        Go to the settings for this extension and add the{" "}
+        <code>stripe_secret_key</code> to Query parameters to connect to Stripe.
       </div>
     );
   const stripe = require("stripe")(stripe_secret_key);
