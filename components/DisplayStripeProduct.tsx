@@ -5,8 +5,10 @@ import { buttonVariants } from "@/components/ui/button";
 
 export async function DisplayStripeProduct({
   product_id,
+  is_live,
 }: {
   product_id: string;
+  is_live: boolean;
 }) {
   return (
     <div className="space-y-4">
@@ -16,7 +18,9 @@ export async function DisplayStripeProduct({
       </div>
       <Link
         className={buttonVariants()}
-        href={`https://dashboard.stripe.com/products/${product_id}`}
+        href={`https://dashboard.stripe.com/${
+          !is_live ? "test/" : ""
+        }products/${product_id}`}
         target="_blank"
       >
         View in Stripe <ExternalLinkIcon className="ml-2 size-4" />

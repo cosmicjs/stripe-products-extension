@@ -87,7 +87,10 @@ export default async function IndexPage({
           <h1>Stripe Products</h1>
         </div>
         {product && product.active === true ? (
-          <DisplayStripeProduct product_id={product.id} />
+          <DisplayStripeProduct
+            product_id={product.id}
+            is_live={product.livemode}
+          />
         ) : (
           <AddStripeProduct object={object} searchParams={searchParams} />
         )}
