@@ -1,3 +1,5 @@
+<img src="https://imgix.cosmicjs.com/13f2b2e0-eaef-11ee-b074-b5c8fe3ef189-Stripe.svg" width="500" height="500" />
+
 # Stripe Products Extension
 
 Manage your Stripe products from the convenience of your Cosmic dashboard. Seamlessly enable ecommerce in your websites and apps.
