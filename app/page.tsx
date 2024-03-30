@@ -55,9 +55,11 @@ async function getContent(searchParams: searchParamsType) {
     );
   } else {
     // If viewing from main extension page
-    const { object } = await cosmic.objects.findOne({
-      id: cosmic_object_id,
-    });
+    const { object } = await cosmic.objects
+      .findOne({
+        id: cosmic_object_id,
+      })
+      .status("any");
     // Check that Object has correct metafields
     if (!isValidObject(object.metadata))
       return (
