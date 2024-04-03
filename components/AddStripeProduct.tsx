@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 type PriceType = {
   currency: string;
   unit_amount: number;
-  recurring?: { interval: string };
+  recurring?: { interval: string; interval_count: number };
 };
 
 export function AddStripeProduct({
@@ -37,6 +37,7 @@ export function AddStripeProduct({
     if (object.metadata.recurring.is_recurring)
       default_price_data.recurring = {
         interval: object.metadata.recurring.interval.key,
+        interval_count: object.metadata.recurring.interval_count,
       };
     const product = await stripe.products.create({
       name: object.title,
