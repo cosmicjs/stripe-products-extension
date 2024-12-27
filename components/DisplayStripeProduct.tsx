@@ -4,7 +4,7 @@ import Link from "next/link";
 import { CheckIcon, ExternalLinkIcon } from "lucide-react";
 
 import { StripeProductSync } from "@/components/StripeProductSync";
-import { syncStripeProduct } from "@/app/clientActions";
+import { syncWithStripe } from "@/app/actions";
 
 interface DisplayStripeProductProps {
   product_id: string;
@@ -28,15 +28,19 @@ export function DisplayStripeProduct({
   onSync,
 }: DisplayStripeProductProps) {
   const handleSync = async () => {
-    const formData = new FormData();
-    formData.append("stripe_secret_key", stripe_secret_key);
-    formData.append("cosmic_object_id", cosmic_object_id);
-    formData.append("bucket_slug", bucket_slug);
-    formData.append("read_key", read_key);
-    formData.append("write_key", write_key);
-    formData.append("product_id", product_id);
-
-    await syncStripeProduct(formData);
+    try {
+      await syncWithStripe(
+        stripe_secret_key,
+        cosmic_object_id,
+        bucket_slug,
+        read_key,
+        write_key,
+        product_id
+      );
+    } catch (error) {
+      console.error("Error syncing:", error);
+      throw error;
+    }
   };
 
   return (
