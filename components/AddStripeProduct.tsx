@@ -10,7 +10,12 @@ import { DisplayStripeProduct } from "@/components/DisplayStripeProduct";
 type PriceType = {
   currency: string;
   unit_amount: number;
-  recurring?: { interval: string; interval_count: number };
+  product?: any;
+  nickname?: any;
+  recurring?: {
+    interval: string;
+    interval_count: number;
+  };
 };
 
 export function AddStripeProduct({
@@ -31,33 +36,88 @@ export function AddStripeProduct({
 
   async function handleAddToStripe() {
     setSubmitting(true);
-    let default_price_data: PriceType = {
-      currency: "USD",
-      unit_amount: object.metadata.price * 100,
-    };
-    // If recurring add interval
-    if (object.metadata.recurring.is_recurring)
-      default_price_data.recurring = {
-        interval: object.metadata.recurring.interval.key,
-        interval_count: object.metadata.recurring.interval_count,
-      };
-    const product = await stripe.products.create({
-      name: object.title,
-      metadata: {
-        cosmic_object_id: object.id,
-      },
-      images: [
-        `${object.metadata.image.imgix_url}?w=600&auto=format,compression`,
-      ],
-      default_price_data,
-    });
-    await cosmic.objects.updateOne(object.id, {
-      metadata: {
-        stripe_product_id: product.id,
-      },
-    });
-    setSubmitting(false);
-    setAdded(true);
+    try {
+      // Create the product in Stripe
+      const product = await stripe.products.create({
+        name: object.title,
+        metadata: {
+          cosmic_object_id: object.id,
+        },
+        images: [
+          `${object.metadata.image.imgix_url}?w=600&auto=format,compression`,
+        ],
+      });
+
+      if (object.metadata.price_variants?.length > 0) {
+        // Handle price variants
+        const updatedPriceVariants = await Promise.all(
+          object.metadata.price_variants.map(async (variant: any) => {
+            const priceData: PriceType = {
+              currency: "USD",
+              unit_amount: variant.price * 100,
+              product: product.id,
+              nickname: variant.label,
+            };
+
+            if (object.metadata.recurring?.is_recurring) {
+              priceData.recurring = {
+                interval: object.metadata.recurring.interval.key,
+                interval_count: object.metadata.recurring.interval_count,
+              };
+            }
+
+            const newPrice = await stripe.prices.create(priceData);
+            return {
+              ...variant,
+              stripe_price_id: newPrice.id,
+            };
+          })
+        );
+
+        // Set the first price as default
+        await stripe.products.update(product.id, {
+          default_price: updatedPriceVariants[0].stripe_price_id,
+        });
+
+        // Update Cosmic with stripe_product_id and updated price variants
+        await cosmic.objects.updateOne(object.id, {
+          metadata: {
+            stripe_product_id: product.id,
+            price_variants: updatedPriceVariants,
+          },
+        });
+      } else {
+        // Handle single price case
+        let default_price_data: PriceType = {
+          currency: "USD",
+          unit_amount: object.metadata.price * 100,
+        };
+
+        if (object.metadata.recurring?.is_recurring) {
+          default_price_data.recurring = {
+            interval: object.metadata.recurring.interval.key,
+            interval_count: object.metadata.recurring.interval_count,
+          };
+        }
+
+        await stripe.products.update(product.id, {
+          default_price_data,
+        });
+
+        // Update Cosmic with just the stripe_product_id
+        await cosmic.objects.updateOne(object.id, {
+          metadata: {
+            stripe_product_id: product.id,
+          },
+        });
+      }
+
+      setAdded(true);
+    } catch (error) {
+      console.error("Error adding product to Stripe:", error);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (added) {
