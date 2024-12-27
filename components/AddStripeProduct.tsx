@@ -5,6 +5,7 @@ import { CheckIcon, Loader2 } from "lucide-react";
 
 import { cosmicBucketConfig } from "@/lib/cosmic";
 import { Button } from "@/components/ui/button";
+import { DisplayStripeProduct } from "@/components/DisplayStripeProduct";
 
 type PriceType = {
   currency: string;
@@ -27,6 +28,7 @@ export function AddStripeProduct({
   const stripe = require("stripe")(searchParams.stripe_secret_key);
   const [submitting, setSubmitting] = useState(false);
   const [added, setAdded] = useState(false);
+
   async function handleAddToStripe() {
     setSubmitting(true);
     let default_price_data: PriceType = {
@@ -57,6 +59,7 @@ export function AddStripeProduct({
     setSubmitting(false);
     setAdded(true);
   }
+
   if (added) {
     return (
       <div className="flex">
@@ -65,18 +68,33 @@ export function AddStripeProduct({
       </div>
     );
   }
+
   return (
     <div>
-      <p className="mb-6">Add {object.title} to Stripe.</p>
-      <Button disabled={submitting} onClick={handleAddToStripe}>
-        {submitting ? (
-          <>
-            <Loader2 className="mr-2 size-4 animate-spin" /> Submitting
-          </>
-        ) : (
-          "Add Product"
-        )}
-      </Button>
+      {object.metadata.stripe_product_id ? (
+        <DisplayStripeProduct
+          product_id={object.metadata.stripe_product_id}
+          is_live={!searchParams.stripe_secret_key.includes("test")}
+          stripe_secret_key={searchParams.stripe_secret_key}
+          cosmic_object_id={object.id}
+          bucket_slug={searchParams.bucket_slug}
+          read_key={searchParams.read_key}
+          write_key={searchParams.write_key}
+        />
+      ) : (
+        <>
+          <p className="mb-6">Add {object.title} to Stripe.</p>
+          <Button disabled={submitting} onClick={handleAddToStripe}>
+            {submitting ? (
+              <>
+                <Loader2 className="mr-2 size-4 animate-spin" /> Submitting
+              </>
+            ) : (
+              "Add Product"
+            )}
+          </Button>
+        </>
+      )}
     </div>
   );
 }

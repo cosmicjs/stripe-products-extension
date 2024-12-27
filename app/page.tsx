@@ -97,6 +97,11 @@ async function getContent(searchParams: searchParamsType) {
         <DisplayStripeProduct
           product_id={product.id}
           is_live={product.livemode}
+          stripe_secret_key={stripe_secret_key}
+          cosmic_object_id={cosmic_object_id}
+          bucket_slug={searchParams.bucket_slug}
+          read_key={searchParams.read_key}
+          write_key={searchParams.write_key}
         />
       );
     } else {
