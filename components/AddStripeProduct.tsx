@@ -88,20 +88,25 @@ export function AddStripeProduct({
         });
       } else {
         // Handle single price case
-        let default_price_data: PriceType = {
+        let priceData: PriceType = {
           currency: "USD",
           unit_amount: object.metadata.price * 100,
+          product: product.id,
         };
 
         if (object.metadata.recurring?.is_recurring) {
-          default_price_data.recurring = {
+          priceData.recurring = {
             interval: object.metadata.recurring.interval.key,
             interval_count: object.metadata.recurring.interval_count,
           };
         }
 
+        // Create the price first
+        const price = await stripe.prices.create(priceData);
+
+        // Then update the product with the price ID
         await stripe.products.update(product.id, {
-          default_price_data,
+          default_price: price.id,
         });
 
         // Update Cosmic with just the stripe_product_id
